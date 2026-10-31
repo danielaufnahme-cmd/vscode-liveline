@@ -1,0 +1,149 @@
+{
+	"name": "liveline",
+	"displayName": "Live Line",
+	"description": "Highlights the line your Python / MicroPython (ESP32) code is running right now, and marks the line that crashed in red with the error.",
+	"version": "0.1.0",
+	"publisher": "local",
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.80.0"
+	},
+	"categories": [
+		"Debuggers",
+		"Other"
+	],
+	"main": "./extension.js",
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "liveline.runPython",
+				"title": "Run Python File (Live Line)",
+				"category": "Live Line",
+				"icon": "$(play)"
+			},
+			{
+				"command": "liveline.stop",
+				"title": "Stop running script",
+				"category": "Live Line",
+				"icon": "$(debug-stop)"
+			},
+			{
+				"command": "liveline.clear",
+				"title": "Clear highlights",
+				"category": "Live Line"
+			},
+			{
+				"command": "liveline.reveal",
+				"title": "Go to running / error line",
+				"category": "Live Line"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "liveline.runPython",
+					"when": "resourceLangId == python && !esp32cam.enabled",
+					"group": "navigation@1"
+				},
+				{
+					"command": "liveline.stop",
+					"when": "liveline.terminalRunning && !esp32cam.enabled",
+					"group": "navigation@2"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "liveline.reveal",
+					"when": "false"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "liveline.runPython",
+				"key": "f5",
+				"when": "editorLangId == python && !esp32cam.enabled && !inDebugMode"
+			},
+			{
+				"command": "liveline.stop",
+				"key": "shift+f5",
+				"when": "liveline.terminalRunning && !esp32cam.enabled && !inDebugMode"
+			},
+			{
+				"command": "liveline.clear",
+				"key": "escape",
+				"when": "liveline.hasHighlights && !suggestWidgetVisible && !findWidgetVisible && !inSnippetMode && !parameterHintsVisible && !hasMultipleSelections"
+			}
+		],
+		"configuration": {
+			"title": "Live Line",
+			"properties": {
+				"liveline.traceTerminalPython": {
+					"type": "boolean",
+					"default": true,
+					"description": "Also show the running line for Python scripts you start yourself in the VSCodium terminal (python file.py). New terminals only."
+				},
+				"liveline.showErrorText": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show the error message at the end of the red line."
+				},
+				"liveline.pythonPath": {
+					"type": "string",
+					"default": "",
+					"description": "Python used by 'Run Python File (Live Line)'. Empty = the workspace .venv if there is one, else python3."
+				}
+			}
+		},
+		"colors": [
+			{
+				"id": "liveline.runningLineBackground",
+				"description": "Background of the line that is running right now.",
+				"defaults": {
+					"dark": "editor.lineHighlightBackground",
+					"light": "editor.lineHighlightBackground",
+					"highContrast": "#ffffff26"
+				}
+			},
+			{
+				"id": "liveline.runningLineRuler",
+				"description": "Scrollbar mark of the running line.",
+				"defaults": {
+					"dark": "#8ab4f8aa",
+					"light": "#1a73e8aa",
+					"highContrast": "#8ab4f8"
+				}
+			},
+			{
+				"id": "liveline.errorLineBackground",
+				"description": "Background of the line where the program crashed.",
+				"defaults": {
+					"dark": "#ff40402a",
+					"light": "#ff40401f",
+					"highContrast": "#ff404050"
+				}
+			},
+			{
+				"id": "liveline.errorCodeBackground",
+				"description": "Background of the exact code on the crashed line that failed.",
+				"defaults": {
+					"dark": "#ff404060",
+					"light": "#ff404045",
+					"highContrast": "#ff404090"
+				}
+			},
+			{
+				"id": "liveline.errorText",
+				"description": "Error message shown after the crashed line.",
+				"defaults": {
+					"dark": "#ff7b72",
+					"light": "#cf222e",
+					"highContrast": "#ff7b72"
+				}
+			}
+		]
+	}
+}
